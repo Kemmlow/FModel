@@ -3,10 +3,10 @@ name: FModel Builder
 on:
   workflow_dispatch:
     inputs:
-        appVersion:
-          description: 'FModel Version And Release Tag'
-          required: true
-          default: '4.0.X.X'
+      appVersion:
+        description: 'FModel Version And Release Tag'
+        required: true
+        default: '4.0.X.X'
 
 jobs:
   build:
@@ -31,11 +31,16 @@ jobs:
             framework: net8.0
             suffix: macos-arm64
             binary: FModel.Mac
+            
     runs-on: ${{ matrix.os }}
+    
+    # This bypasses the strict C++ template errors thrown by modern Clang/Xcode on macOS
+    env:
+      CXXFLAGS: "-Wno-missing-template-arg-list-after-template-kw"
 
     steps:
       - name: GIT Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           submodules: 'true'
 
@@ -43,13 +48,9 @@ jobs:
         run: git submodule update --init --recursive
 
       - name: .NET 8 Setup
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-
-      - name: Patch ACL for MacOS
-        if: runner.os == 'macOS'
-        run: sed -i 's/template is_bound_to(/template is_bound_to<>(/g' CUE4Parse/CUE4Parse-Natives/ACL/external/acl/includes/acl/decompression/impl/decompress.impl.h
 
       - name: Download Native Dependencies (MacOS)
         if: runner.os == 'macOS'
