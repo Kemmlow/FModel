@@ -28,6 +28,10 @@ jobs:
             suffix: macos-arm64
             binary: FModel.Mac
     runs-on: ${{ matrix.os }}
+    
+    # This bypasses the strict C++ template errors thrown by modern Clang/Xcode on macOS
+    env:
+      CXXFLAGS: "-Wno-missing-template-arg-list-after-template-kw"
 
     steps:
       - name: GIT Checkout
