@@ -10,7 +10,28 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+            project: FModel
+            framework: net8.0-windows
+            suffix: win-x64
+            binary: FModel.exe
+          - os: macos-latest
+            rid: osx-x64
+            project: FModel.Mac
+            framework: net8.0
+            suffix: macos-x64
+            binary: FModel.Mac
+          - os: macos-latest
+            rid: osx-arm64
+            project: FModel.Mac
+            framework: net8.0
+            suffix: macos-arm64
+            binary: FModel.Mac
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: GIT Checkout
@@ -26,17 +47,31 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Download Native Dependencies (MacOS)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p FModel.Mac/Native/Mac
+          curl -L https://github.com/WorkingRobot/OodleUE/raw/refs/heads/main/Engine/Source/Runtime/OodleDataCompression/Sdks/2.9.16/lib/Mac/liboo2coremac64.2.9.16.dylib -o FModel.Mac/Native/Mac/liboo2coremac64.dylib
+          curl -L https://github.com/WorkingRobot/OodleUE/raw/refs/heads/main/Engine/Source/Runtime/OodleDataCompression/Sdks/2.9.16/lib/Mac/liboo2extmac64.2.9.16.dylib -o FModel.Mac/Native/Mac/liboo2extmac64.dylib
+
       - name: .NET Restore
-        run: dotnet restore FModel
+        run: dotnet restore ${{ matrix.project }} -r ${{ matrix.rid }}
 
       - name: .NET Publish
-        run: dotnet publish FModel -c Release --no-self-contained -r win-x64 -f net8.0-windows -o "./FModel/bin/Publish/" -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:DebugType=None -p:GenerateDocumentationFile=false -p:DebugSymbols=false -p:AssemblyVersion=${{ github.event.inputs.appVersion }} -p:FileVersion=${{ github.event.inputs.appVersion }}
+        run: dotnet publish ${{ matrix.project }} -c Release --no-self-contained -r ${{ matrix.rid }} -f ${{ matrix.framework }} -o "./Publish/" -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:DebugType=None -p:GenerateDocumentationFile=false -p:DebugSymbols=false -p:AssemblyVersion=${{ github.event.inputs.appVersion }} -p:FileVersion=${{ github.event.inputs.appVersion }}
 
-      - name: ZIP File
+      - name: ZIP File (Windows)
+        if: matrix.os == 'windows-latest'
         uses: papeloto/action-zip@v1.2
         with:
-          files: ./FModel/bin/Publish/FModel.exe
-          dest: FModel.zip # will end up in working directory not the Publish folder
+          files: ./Publish/${{ matrix.binary }}
+          dest: FModel-${{ matrix.suffix }}.zip
+
+      - name: ZIP File (MacOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          cd Publish
+          zip -r ../FModel-${{ matrix.suffix }}.zip ${{ matrix.binary }}
 
       - name: GIT Release
         uses: marvinpinto/action-automatic-releases@latest
@@ -45,4 +80,4 @@ jobs:
           automatic_release_tag: ${{ github.event.inputs.appVersion }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: false
-          files: FModel.zip
+          files: FModel-${{ matrix.suffix }}.zip

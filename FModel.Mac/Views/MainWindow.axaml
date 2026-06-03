@@ -1,0 +1,66 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:FModel.Mac.ViewModels"
+        xmlns:core="using:FModel.ViewModels"
+        x:Class="FModel.Mac.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="{Binding AppVM.Title}"
+        Width="1200" Height="800"
+        Background="#1e1e1e"
+        Foreground="White">
+    <DockPanel>
+        <!-- Menu -->
+        <Menu DockPanel.Dock="Top" Background="#2d2d2d">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open Directory" Click="OnOpenClick"/>
+                <MenuItem Header="_Settings" Click="OnSettingsClick"/>
+                <Separator/>
+                <MenuItem Header="_Exit" Click="OnExitClick"/>
+            </MenuItem>
+            <MenuItem Header="_Directory">
+                <MenuItem Header="_AES Manager" Click="OnAesManagerClick"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Click="OnAboutClick"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- Status Bar -->
+        <Border DockPanel.Dock="Bottom" Height="22" Background="#007acc">
+            <TextBlock Text="{Binding AppVM.Status.Label}" Foreground="White" Margin="10,0" VerticalAlignment="Center" FontSize="11"/>
+        </Border>
+
+        <Grid ColumnDefinitions="300, 1, *">
+            <!-- Sidebar -->
+            <Grid Grid.Column="0" RowDefinitions="Auto, *">
+                <StackPanel Grid.Row="0" Background="#252526" Spacing="5" Padding="10">
+                    <TextBlock Text="GAME ARCHIVES" FontSize="11" FontWeight="Bold" Opacity="0.6"/>
+                    <Button Content="Open Game Folder" Click="OnOpenClick" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                </StackPanel>
+
+                <TreeView Grid.Row="1" ItemsSource="{Binding AppVM.CUE4Parse.TreeItems}" Background="#252526">
+                    <TreeView.ItemTemplate>
+                        <TreeDataTemplate DataType="core:FileTreeItem" ItemsSource="{Binding Children}">
+                            <TextBlock Text="{Binding Name}"/>
+                        </TreeDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </Grid>
+
+            <!-- Vertical Separator -->
+            <Border Grid.Column="1" Background="#333333"/>
+
+            <!-- Main Content -->
+            <TabControl Grid.Column="2" ItemsSource="{Binding AppVM.Tabs}" Padding="0">
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock Text="Asset"/>
+                            <Button Content="x" Padding="2" FontSize="10" Background="Transparent"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+            </TabControl>
+        </Grid>
+    </DockPanel>
+</Window>
