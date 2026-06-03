@@ -1,0 +1,13 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="FModel.Mac.Views.About"
+        Title="About FModel"
+        Width="400" Height="300" WindowStartupLocation="CenterOwner">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+        <Image Source="/Assets/FModel.ico" Width="64" Height="64"/>
+        <TextBlock Text="FModel for MacOS" FontSize="20" FontWeight="Bold"/>
+        <TextBlock Text="Version 4.4.4.0 (Intel Port)"/>
+        <TextBlock Text="Created by 4sval and the community"/>
+        <Button Content="Close" Click="CloseButton_Click" HorizontalAlignment="Center"/>
+    </StackPanel>
+</Window>
