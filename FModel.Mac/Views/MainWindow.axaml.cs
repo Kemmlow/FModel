@@ -34,7 +34,7 @@ public partial class MainWindow : Window
         if (!string.IsNullOrEmpty(result))
         {
             var vm = (MainWindowViewModel)DataContext;
-            vm.AppVM.CUE4Parse.Initialize(result, EGame.GAME_UE4_27); // Default to 4.27 for now
+            vm.AppVM.CUE4Parse.Initialize(result, EGame.GAME_UE4_27);
             vm.AppVM.Status.Label = "Loaded: " + result;
         }
     }

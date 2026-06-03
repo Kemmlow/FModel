@@ -40,6 +40,10 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Patch ACL for MacOS
+        if: runner.os == 'macOS'
+        run: sed -i 's/template is_bound_to(/template is_bound_to<>(/g' CUE4Parse/CUE4Parse-Natives/ACL/external/acl/includes/acl/decompression/impl/decompress.impl.h
+
       - name: Download Native Dependencies (MacOS)
         if: runner.os == 'macOS'
         run: |
@@ -64,8 +68,7 @@ jobs:
       - name: ZIP File (MacOS)
         if: matrix.os == 'macos-latest'
         run: |
-          cd Publish
-          zip -r ../${{ github.sha }}-${{ matrix.suffix }}.zip ${{ matrix.binary }}
+          zip -r ${{ github.sha }}-${{ matrix.suffix }}.zip Publish/
 
       - name: Edit QA Artifact
         uses: ncipollo/release-action@v1.20.0
@@ -97,4 +100,4 @@ jobs:
           url: "https://api.fmodel.app/v1/infos/${{ secrets.QA_ID }}"
           method: "PATCH"
           bearerToken: ${{ fromJson(steps.fmodel_auth.outputs.response).accessToken }}
-          data: '{"version": "${{ steps.package_version.outputs.version }}-dev+${{ github.sha }}", "downloadUrl": "https://github.com/4sval/FModel/releases/download/qa/${{ github.sha }}.zip"}'
+          data: '{"version": "${{ steps.package_version.outputs.version }}-dev+${{ github.sha }}", "downloadUrl": "https://github.com/4sval/FModel/releases/download/qa/${{ github.sha }}-${{ matrix.suffix }}.zip"}'
