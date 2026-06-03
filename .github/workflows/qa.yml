@@ -44,10 +44,6 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Patch ACL for MacOS
-        if: runner.os == 'macOS'
-        run: sed -i 's/template is_bound_to(/template is_bound_to<>(/g' CUE4Parse/CUE4Parse-Natives/ACL/external/acl/includes/acl/decompression/impl/decompress.impl.h
-
       - name: Download Native Dependencies (MacOS)
         if: runner.os == 'macOS'
         run: |
