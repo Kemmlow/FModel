@@ -1,5 +1,5 @@
 using Avalonia.Controls;
-using FModel.Core.Interfaces;
+using FModel.Interfaces;
 using System.Threading.Tasks;
 
 namespace FModel.Mac.Services;
@@ -15,7 +15,6 @@ public class AvaloniaDialogService : IDialogService
 
     public void ShowMessage(string message, string caption)
     {
-        // Simple message box using Avalonia (placeholder)
         System.Console.WriteLine($"[{caption}] {message}");
     }
 
@@ -26,7 +25,6 @@ public class AvaloniaDialogService : IDialogService
 
     public string? OpenFolderDialog(string title)
     {
-        // Placeholder for real folder picker
         return null;
     }
 }
