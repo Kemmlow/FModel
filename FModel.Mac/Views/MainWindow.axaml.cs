@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using FModel.Mac.ViewModels;
 using FModel.Mac.Services;
 using FModel.Services;
@@ -17,7 +18,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         ApplicationService.DialogService = new AvaloniaDialogService(this);
         DataContext = new MainWindowViewModel();
-
+        
         var vm = (MainWindowViewModel)DataContext;
         vm.AppVM.OnStartup();
     }
@@ -29,13 +30,21 @@ public partial class MainWindow : Window
 
     public async void OnOpenClick(object sender, RoutedEventArgs e)
     {
-        var dialog = new OpenFolderDialog { Title = "Select game folder" };
-        var result = await dialog.ShowAsync(this);
-        if (!string.IsNullOrEmpty(result))
+        var folders = await this.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
+            Title = "Select game folder",
+            AllowMultiple = false
+        });
+
+        if (folders != null && folders.Count > 0)
+        {
+            var result = folders[0].Path.LocalPath;
             var vm = (MainWindowViewModel)DataContext;
-            vm.AppVM.CUE4Parse.Initialize(result, EGame.GAME_UE4_27);
-            vm.AppVM.Status.Label = "Loaded: " + result;
+            if (vm != null)
+            {
+                vm.AppVM.CUE4Parse.Initialize(result, EGame.GAME_UE4_27);
+                vm.AppVM.Status.Label = "Loaded: " + result;
+            }
         }
     }
 
