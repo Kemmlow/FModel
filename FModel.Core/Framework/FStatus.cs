@@ -1,30 +1,32 @@
 namespace FModel.Framework;
 
+public enum EStatusKind { Loading, Stopping, Ready }
+
 public class FStatus : ViewModel
 {
     private bool _isReady;
     public bool IsReady
     {
         get => _isReady;
-        private set => SetProperty(ref _isReady, value);
+        set => SetProperty(ref _isReady, value);
     }
 
     private EStatusKind _kind;
     public EStatusKind Kind
     {
         get => _kind;
-        private set
+        set
         {
             SetProperty(ref _kind, value);
             IsReady = Kind != EStatusKind.Loading && Kind != EStatusKind.Stopping;
         }
     }
 
-    private string _label;
+    private string _label = string.Empty;
     public string Label
     {
         get => _label;
-        private set => SetProperty(ref _label, value);
+        set => SetProperty(ref _label, value);
     }
 
     public FStatus()
