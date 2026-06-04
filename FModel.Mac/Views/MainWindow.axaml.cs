@@ -18,7 +18,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         ApplicationService.DialogService = new AvaloniaDialogService(this);
         DataContext = new MainWindowViewModel();
-        
+
         var vm = (MainWindowViewModel)DataContext;
         vm.AppVM.OnStartup();
     }
