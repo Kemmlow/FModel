@@ -1,0 +1,24 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="FModel.Mac.Views.Settings.AesManager"
+        Title="AES Keys Manager"
+        Width="800" Height="500" WindowStartupLocation="CenterOwner">
+    <Grid RowDefinitions="Auto, *, Auto">
+        <StackPanel Grid.Row="0" Margin="10">
+            <TextBlock Text="Main Key" FontWeight="Bold"/>
+            <TextBox Name="MainKeyBox" Margin="0,5"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" Margin="10" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="GUID" Binding="{Binding Guid}"/>
+                <DataGridTextColumn Header="Key" Binding="{Binding Key}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Content="Fetch Keys" Margin="5"/>
+            <Button Content="Save" Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>

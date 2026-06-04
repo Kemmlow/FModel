@@ -1,0 +1,13 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="FModel.Mac.Views.Settings.DirectorySelector"
+        Title="Select Game Directory"
+        Width="600" Height="400" WindowStartupLocation="CenterOwner">
+    <Grid RowDefinitions="*, Auto">
+        <ListBox Name="GamesList" Margin="10"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Content="Add Directory" Margin="5"/>
+            <Button Content="Select" Margin="5" IsDefault="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

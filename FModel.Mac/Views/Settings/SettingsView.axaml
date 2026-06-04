@@ -1,0 +1,40 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="FModel.Mac.Views.Settings.SettingsView"
+        Title="Settings"
+        Width="900" Height="600" WindowStartupLocation="CenterOwner"
+        Background="#1e1e1e" Foreground="White">
+    <Grid ColumnDefinitions="200, *">
+        <!-- Categories -->
+        <ListBox Grid.Column="0" Background="#252526">
+            <ListBoxItem Content="General"/>
+            <ListBoxItem Content="Models"/>
+            <ListBoxItem Content="Keybindings"/>
+        </ListBox>
+
+        <!-- Content Area -->
+        <ScrollViewer Grid.Column="1" Padding="20">
+            <StackPanel Spacing="20">
+                <TextBlock Text="General Settings" FontSize="18" FontWeight="Bold"/>
+
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Output Directory"/>
+                    <Grid ColumnDefinitions="*, Auto">
+                        <TextBox Grid.Column="0"/>
+                        <Button Grid.Column="1" Content="..." Margin="5,0,0,0"/>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Archive Directory"/>
+                    <Grid ColumnDefinitions="*, Auto">
+                        <TextBox Grid.Column="0"/>
+                        <Button Grid.Column="1" Content="..." Margin="5,0,0,0"/>
+                    </Grid>
+                </StackPanel>
+
+                <CheckBox Content="Keep Directory Structure"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
