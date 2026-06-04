@@ -6,6 +6,8 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: write   # Allows creating/updating releases and uploading artifacts
     strategy:
       matrix:
         include:
@@ -29,7 +31,6 @@ jobs:
             binary: FModel.Mac
     runs-on: ${{ matrix.os }}
     
-    # This bypasses the strict C++ template errors thrown by modern Clang/Xcode on macOS
     env:
       CXXFLAGS: "-Wno-missing-template-arg-list-after-template-kw"
 
