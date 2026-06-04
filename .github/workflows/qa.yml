@@ -28,6 +28,10 @@ jobs:
             suffix: macos-arm64
             binary: FModel.Mac
     runs-on: ${{ matrix.os }}
+    
+    # This bypasses the strict C++ template errors thrown by modern Clang/Xcode on macOS
+    env:
+      CXXFLAGS: "-Wno-missing-template-arg-list-after-template-kw"
 
     steps:
       - name: GIT Checkout
@@ -39,10 +43,6 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
-
-      - name: Patch ACL for MacOS
-        if: runner.os == 'macOS'
-        run: sed -i 's/template is_bound_to(/template is_bound_to<>(/g' CUE4Parse/CUE4Parse-Natives/ACL/external/acl/includes/acl/decompression/impl/decompress.impl.h
 
       - name: Download Native Dependencies (MacOS)
         if: runner.os == 'macOS'
